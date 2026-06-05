@@ -127,47 +127,80 @@ if (canvas && window.THREE) {
   const ambient = new THREE.AmbientLight(0xffffff, 0.5);
   scene.add(ambient);
 
-  // MATERIAL
-  const material = new THREE.MeshStandardMaterial({
-    color: 0xD6815E,
-    roughness: 0.6
-  });
+ // ─────────────────────────────
+// REALISTIC HOUSE SETUP
+// ─────────────────────────────
 
-  // GROUND
-  const ground = new THREE.Mesh(
-    new THREE.PlaneGeometry(20, 20),
-    new THREE.MeshStandardMaterial({ color: 0x222222 })
-  );
-  ground.rotation.x = -Math.PI / 2;
-  scene.add(ground);
+// MATERIALS
+const wallMat = new THREE.MeshStandardMaterial({
+  color: 0xffffff,
+  roughness: 0.8
+});
 
-  // FOUNDATION
-  const foundation = new THREE.Mesh(
-    new THREE.BoxGeometry(4, 0.3, 4),
-    material
-  );
-  foundation.position.y = 0.15;
-  foundation.scale.set(0, 1, 0);
-  scene.add(foundation);
+const roofMat = new THREE.MeshStandardMaterial({
+  color: 0x333333,
+  roughness: 0.5
+});
 
-  // WALLS
-  const walls = new THREE.Mesh(
-    new THREE.BoxGeometry(4, 2, 4),
-    material
-  );
-  walls.position.y = 1.2;
-  walls.scale.set(0, 1, 0);
-  scene.add(walls);
+const accentMat = new THREE.MeshStandardMaterial({
+  color: 0xD6815E,
+  roughness: 0.6
+});
 
-  // ROOF
-  const roof = new THREE.Mesh(
-    new THREE.ConeGeometry(3, 1.5, 4),
-    material
-  );
-  roof.position.y = 3;
-  roof.rotation.y = Math.PI / 4;
-  roof.scale.set(0, 0, 0);
-  scene.add(roof);
+// FOUNDATION
+const foundation = new THREE.Mesh(
+  new THREE.BoxGeometry(5, 0.3, 5),
+  accentMat
+);
+foundation.position.y = 0.15;
+foundation.scale.set(0, 1, 0);
+scene.add(foundation);
+
+// MAIN HOUSE
+const house = new THREE.Mesh(
+  new THREE.BoxGeometry(4.5, 2.5, 4.5),
+  wallMat
+);
+house.position.y = 1.5;
+house.scale.set(0, 1, 0);
+scene.add(house);
+
+// ROOF (more realistic shape)
+const roof = new THREE.Mesh(
+  new THREE.ConeGeometry(3.5, 1.8, 4),
+  roofMat
+);
+roof.position.y = 3.3;
+roof.rotation.y = Math.PI / 4;
+roof.scale.set(0, 0, 0);
+scene.add(roof);
+
+// DOOR
+const door = new THREE.Mesh(
+  new THREE.BoxGeometry(0.8, 1.5, 0.1),
+  accentMat
+);
+door.position.set(0, 0.9, 2.3);
+door.scale.set(0, 1, 1);
+scene.add(door);
+
+// WINDOWS
+const windowMat = new THREE.MeshStandardMaterial({
+  color: 0x87CEEB,
+  emissive: 0x222222
+});
+
+const window1 = new THREE.Mesh(
+  new THREE.BoxGeometry(0.8, 0.8, 0.1),
+  windowMat
+);
+window1.position.set(-1.2, 1.8, 2.3);
+window1.scale.set(0, 1, 1);
+scene.add(window1);
+
+const window2 = window1.clone();
+window2.position.set(1.2, 1.8, 2.3);
+scene.add(window2);
 
   // GSAP TIMELINE
   const tl = gsap.timeline({ paused: true });
