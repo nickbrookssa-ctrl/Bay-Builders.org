@@ -1,44 +1,78 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta charset="UTF-8">
   <title>Bay Builders</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+  <!-- CSS -->
   <link rel="stylesheet" href="style.css">
-</head>
 
+</head>
 <body>
 
-  <!-- LOADER -->
-  <div id="loader">
-    <h1>BAY BUILDERS</h1>
-    <div class="progress-bar">
-      <div class="progress"></div>
-    </div>
-    <p>Loading...</p>
+<!-- NAV -->
+<nav class="nav">
+  <img src="logo.png" class="logo" />
+  <div class="nav-links">
+    <a href="#home">Home</a>
+    <a href="#about">About</a>
+    <a href="#services">Services</a>
+    <a href="#contact">Contact</a>
   </div>
+</nav>
 
-  <!-- 3D CANVAS -->
-  <canvas id="threeCanvas"></canvas>
+<!-- 3D CANVAS -->
+<canvas id="threeCanvas"></canvas>
 
-  <!-- CONTENT -->
-  <section class="hero">
-    <h1>BAY BUILDERS</h1>
-    <p>Building for your vision</p>
-  </section>
+<!-- HOME -->
+<section id="home" class="section hero">
+  <h1>BAY BUILDERS</h1>
+  <p>Building for your vision</p>
+</section>
 
-  <!-- THREE JS -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<!-- ABOUT -->
+<section id="about" class="section">
+  <h2>About Us</h2>
+  <p>
+    Bay Builders, based in Gqeberha, Eastern Cape, delivers high-quality
+    construction services with integrity and precision. Since 2004,
+    we have built a reputation for excellence and client satisfaction.
+  </p>
+</section>
 
-  <!-- GLTF LOADER -->
-  <script src="https://cdn.jsdelivr.net/npm/three@0.128/examples/js/loaders/GLTFLoader.js"></script>
+<!-- SERVICES -->
+<section id="services" class="section">
+  <h2>What We Offer</h2>
+  <ul>
+    <li>Turnkey Projects</li>
+    <li>Renovations</li>
+    <li>New Builds</li>
+    <li>Alterations</li>
+    <li>Interior & Exterior Work</li>
+  </ul>
+</section>
 
-  <!-- GSAP -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+<!-- CONTACT -->
+<section id="contact" class="section">
+  <h2>Contact</h2>
+  <p><strong>Owner:</strong> Reon Human</p>
+  <p><strong>Phone:</strong> 083 379 9899</p>
+  <p><strong>Email:</strong> baybuilderspe1@gmail.com</p>
+  <p><strong>Location:</strong> Eastern Cape</p>
+</section>
 
-  <!-- YOUR JS -->
-  <script src="main.js"></script>
+<!-- THREE JS -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+
+<!-- GLTF LOADER -->
+<script src="https://cdn.jsdelivr.net/npm/three@0.128/examples/js/loaders/GLTFLoader.js"></script>
+
+<!-- GSAP -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+
+<!-- YOUR JS -->
+<script src="main.js"></script>
 
 </body>
 </html>
