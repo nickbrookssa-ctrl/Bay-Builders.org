@@ -206,9 +206,12 @@ scene.add(window2);
   const tl = gsap.timeline({ paused: true });
 
   tl.to(foundation.scale, { x: 1, z: 1, duration: 1 })
-    .to(walls.scale, { x: 1, z: 1, duration: 1 })
-    .to(roof.scale, { x: 1, y: 1, z: 1, duration: 1 })
-    .to(camera.position, { z: 5, y: 3, duration: 1 }, 0);
+  .to(house.scale, { x: 1, z: 1, duration: 1 })
+  .to(roof.scale, { x: 1, y: 1, z: 1, duration: 1 })
+  .to(door.scale, { x: 1, duration: 0.5 })
+  .to(window1.scale, { x: 1, duration: 0.5 })
+  .to(window2.scale, { x: 1, duration: 0.5 })
+  .to(camera.position, { z: 5, y: 3, duration: 1 }, 0);
 
   // SCROLL CONTROL
   window.addEventListener("scroll", () => {
