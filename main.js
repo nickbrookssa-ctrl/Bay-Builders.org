@@ -1,126 +1,192 @@
-// ═════════════════════════════
-// CLEAN BAY BUILDERS 3D MODEL
-// ═════════════════════════════
+window.addEventListener("DOMContentLoaded", () => {
 
-// SAFE LOADER (no crashes)
-window.addEventListener("load", () => {
-  const loader = document.getElementById("loader");
-
-  if (loader) {
-    setTimeout(() => {
-      loader.style.opacity = "0";
-      setTimeout(() => loader.style.display = "none", 500);
-    }, 1000);
-  }
-});
-
-// ─────────────────────────────
-// THREE JS SETUP
-// ─────────────────────────────
-
-const canvas = document.getElementById("threeCanvas");
-
-// STOP if canvas missing
-if (!canvas) {
-  console.error("Canvas not found");
-} else {
+  const canvas = document.getElementById("threeCanvas");
 
   const scene = new THREE.Scene();
 
   const camera = new THREE.PerspectiveCamera(
-    60,
+    75,
     window.innerWidth / window.innerHeight,
     0.1,
     1000
   );
-
-  camera.position.set(0, 2, 8);
+  camera.position.set(0, 1.6, 5);
 
   const renderer = new THREE.WebGLRenderer({
     canvas: canvas,
-    antialias: true,
-    alpha: true
+    antialias: true
   });
 
   renderer.setSize(window.innerWidth, window.innerHeight);
-  renderer.shadowMap.enabled = true;
 
-  // LIGHT
-  const light = new THREE.DirectionalLight(0xffa07a, 1.2);
-  light.position.set(5, 10, 5);
-  light.castShadow = true;
+  // LIGHTS
+  scene.add(new THREE.AmbientLight(0xffffff, 0.6));
+
+  const light = new THREE.DirectionalLight(0xffffff, 1);
+  light.position.set(10, 20, 10);
   scene.add(light);
 
-  const ambient = new THREE.AmbientLight(0xffffff, 0.4);
-  scene.add(ambient);
-
-  // GROUND
-  const ground = new THREE.Mesh(
-    new THREE.PlaneGeometry(30, 30),
+  // FLOOR
+  const floor = new THREE.Mesh(
+    new THREE.PlaneGeometry(200, 200),
     new THREE.MeshStandardMaterial({ color: 0x222222 })
   );
-  ground.rotation.x = -Math.PI / 2;
-  ground.receiveShadow = true;
-  scene.add(ground);
+  floor.rotation.x = -Math.PI / 2;
+  scene.add(floor);
 
-  // ─────────────────────────────
   // LOAD MODEL
-  // ─────────────────────────────
+  const loader = new THREE.GLTFLoader();
+  let house;
 
-  const loaderGLTF = new THREE.GLTFLoader();
+  loader.load("house.glb", (gltf) => {
+    house = gltf.scene;
+    house.scale.set(1.5, 1.5, 1.5);
+    scene.add(house);
+  });
 
-  loaderGLTF.load(
-    "house.glb",
-    function (gltf) {
-      const model = gltf.scene;
+  // =========================
+  // 🚪 DOOR (CUSTOM)
+  // =========================
 
-      model.scale.set(1.5, 1.5, 1.5);
-      model.position.set(0, 0, 0);
-      model.rotation.y = Math.PI;
-
-      model.traverse((child) => {
-        if (child.isMesh) {
-          child.castShadow = true;
-          child.receiveShadow = true;
-        }
-      });
-
-      scene.add(model);
-
-      // animate in
-      gsap.from(model.scale, {
-        x: 0,
-        y: 0,
-        z: 0,
-        duration: 2,
-        ease: "power3.out"
-      });
-    },
-    undefined,
-    function (error) {
-      console.error("MODEL ERROR:", error);
-    }
+  const door = new THREE.Mesh(
+    new THREE.BoxGeometry(1, 2, 0.1),
+    new THREE.MeshStandardMaterial({ color: 0x8B4513 })
   );
 
-  // SCROLL CAMERA
-  window.addEventListener("scroll", () => {
-    const scrollY = window.scrollY;
-    camera.position.z = 8 - scrollY * 0.01;
-    camera.position.y = 2 + scrollY * 0.005;
+  door.position.set(0, 1, 0); // adjust if needed
+  scene.add(door);
+
+  let doorOpen = false;
+
+  function toggleDoor() {
+    if (doorOpen) {
+      gsap.to(door.rotation, { y: 0, duration: 0.5 });
+    } else {
+      gsap.to(door.rotation, { y: -Math.PI / 2, duration: 0.5 });
+    }
+    doorOpen = !doorOpen;
+  }
+
+  // =========================
+  // 🧱 COLLISION WALLS
+  // =========================
+
+  const walls = [];
+
+  function addWall(x, z, w, d) {
+    const wall = {
+      minX: x - w / 2,
+      maxX: x + w / 2,
+      minZ: z - d / 2,
+      maxZ: z + d / 2
+    };
+    walls.push(wall);
+  }
+
+  // Example house boundaries (adjust to your model)
+  addWall(0, 0, 6, 6);
+
+  function checkCollision(x, z) {
+    for (let wall of walls) {
+      if (
+        x > wall.minX &&
+        x < wall.maxX &&
+        z > wall.minZ &&
+        z < wall.maxZ
+      ) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  // =========================
+  // 🎮 CONTROLS
+  // =========================
+
+  const keys = {};
+
+  document.addEventListener("keydown", (e) => {
+    keys[e.key.toLowerCase()] = true;
+
+    if (e.key.toLowerCase() === "e") {
+      toggleDoor();
+    }
   });
+
+  document.addEventListener("keyup", (e) => {
+    keys[e.key.toLowerCase()] = false;
+  });
+
+  let yaw = 0;
+  let pitch = 0;
+
+  document.body.addEventListener("click", () => {
+    document.body.requestPointerLock();
+  });
+
+  document.addEventListener("mousemove", (e) => {
+    if (document.pointerLockElement === document.body) {
+      yaw -= e.movementX * 0.002;
+      pitch -= e.movementY * 0.002;
+
+      pitch = Math.max(-Math.PI/2, Math.min(Math.PI/2, pitch));
+    }
+  });
+
+  const speed = 0.08;
+
+  function move() {
+    let moveX = 0;
+    let moveZ = 0;
+
+    if (keys["w"]) moveZ -= speed;
+    if (keys["s"]) moveZ += speed;
+    if (keys["a"]) moveX -= speed;
+    if (keys["d"]) moveX += speed;
+
+    const forward = new THREE.Vector3(
+      Math.sin(yaw),
+      0,
+      Math.cos(yaw)
+    );
+
+    const right = new THREE.Vector3(
+      Math.cos(yaw),
+      0,
+      -Math.sin(yaw)
+    );
+
+    const newX =
+      camera.position.x +
+      forward.x * moveZ +
+      right.x * moveX;
+
+    const newZ =
+      camera.position.z +
+      forward.z * moveZ +
+      right.z * moveX;
+
+    // COLLISION CHECK
+    if (!checkCollision(newX, newZ)) {
+      camera.position.x = newX;
+      camera.position.z = newZ;
+    }
+  }
 
   // LOOP
   function animate() {
     requestAnimationFrame(animate);
+
+    move();
+
+    camera.rotation.order = "YXZ";
+    camera.rotation.y = yaw;
+    camera.rotation.x = pitch;
+
     renderer.render(scene, camera);
   }
 
   animate();
 
-  // RESIZE
-  window.addEventListener("resize", () => {
-    camera.aspect = window.innerWidth / window.innerHeight;
-    camera.updateProjectionMatrix();
-    renderer.setSize(window.innerWidth, window.innerHeight);
-  });
-}
+});
