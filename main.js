@@ -1,17 +1,19 @@
 // ═══════════════════════════════════════
-// BAY BUILDERS — REAL 3D MODEL VERSION
+// BAY BUILDERS — CLEAN 3D MODEL ONLY
 // ═══════════════════════════════════════
 
 // LOADER
 window.addEventListener("load", () => {
   const loader = document.getElementById("loader");
 
-  setTimeout(() => {
-    loader.style.opacity = "0";
+  if (loader) {
     setTimeout(() => {
-      loader.style.display = "none";
-    }, 500);
-  }, 1000);
+      loader.style.opacity = "0";
+      setTimeout(() => {
+        loader.style.display = "none";
+      }, 500);
+    }, 1000);
+  }
 });
 
 // ─────────────────────────────
@@ -64,11 +66,11 @@ scene.add(ground);
 // LOAD REAL 3D MODEL
 // ─────────────────────────────
 
-const loader = new THREE.GLTFLoader();
+const loaderGLTF = new THREE.GLTFLoader();
 
 let houseModel;
 
-loader.load(
+loaderGLTF.load(
   "house.glb",
   function (gltf) {
     houseModel = gltf.scene;
@@ -86,7 +88,7 @@ loader.load(
 
     scene.add(houseModel);
 
-    // ANIMATE IN
+    // ANIMATION
     gsap.from(houseModel.scale, {
       x: 0,
       y: 0,
@@ -97,12 +99,12 @@ loader.load(
   },
   undefined,
   function (error) {
-    console.error("Error loading model:", error);
+    console.error("MODEL LOAD ERROR:", error);
   }
 );
 
 // ─────────────────────────────
-// SCROLL CAMERA EFFECT
+// SCROLL CAMERA
 // ─────────────────────────────
 
 window.addEventListener("scroll", () => {
@@ -123,10 +125,7 @@ function animate() {
 
 animate();
 
-// ─────────────────────────────
 // RESIZE
-// ─────────────────────────────
-
 window.addEventListener("resize", () => {
   camera.aspect = window.innerWidth / window.innerHeight;
   camera.updateProjectionMatrix();
