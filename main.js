@@ -1,182 +1,50 @@
 // ═══════════════════════════════════════
-// BAY BUILDERS — MAIN JS (FIXED VERSION)
+// BAY BUILDERS — CINEMATIC EXPERIENCE
 // ═══════════════════════════════════════
 
-document.addEventListener("DOMContentLoaded", () => {
-
-  // ─────────────────────────────────────
-  // LOADER
-  // ─────────────────────────────────────
+// LOADER FIX
+window.addEventListener("load", () => {
   const loader = document.getElementById("loader");
-  const pct = document.getElementById("loaderPct");
-  const bar = document.getElementById("loaderBarFill");
 
-  let load = 0;
-  const interval = setInterval(() => {
-    load++;
-    pct.textContent = load + "%";
-    bar.style.width = load + "%";
+  setTimeout(() => {
+    loader.style.opacity = "0";
+    setTimeout(() => loader.style.display = "none", 500);
+  }, 800);
+});
 
-    if (load >= 100) {
-      clearInterval(interval);
-      setTimeout(() => {
-        loader.classList.add("hidden");
-      }, 500);
-    }
-  }, 20);
+// ─────────────────────────────────────
+// BASIC UI
+// ─────────────────────────────────────
 
-  // ─────────────────────────────────────
-  // CUSTOM CURSOR
-  // ─────────────────────────────────────
-  const cursor = document.getElementById("cursor");
-  const follower = document.getElementById("cursor-follower");
+// CURSOR
+const cursor = document.getElementById("cursor");
+const follower = document.getElementById("cursor-follower");
 
-  document.addEventListener("mousemove", (e) => {
-    cursor.style.left = e.clientX + "px";
-    cursor.style.top = e.clientY + "px";
+document.addEventListener("mousemove", (e) => {
+  cursor.style.transform = `translate(${e.clientX}px, ${e.clientY}px)`;
+  follower.style.transform = `translate(${e.clientX}px, ${e.clientY}px)`;
+});
 
-    follower.style.left = e.clientX + "px";
-    follower.style.top = e.clientY + "px";
-  });
+// MOBILE MENU
+document.getElementById("navBurger").onclick = () => {
+  document.getElementById("mobMenu").classList.toggle("open");
+};
 
-  // ─────────────────────────────────────
-  // NAV SCROLL
-  // ─────────────────────────────────────
-  const nav = document.getElementById("nav");
+// SCROLL REVEAL
+const reveals = document.querySelectorAll(".reveal-up, .reveal-left, .reveal-right");
 
-  window.addEventListener("scroll", () => {
-    if (window.scrollY > 50) {
-      nav.classList.add("scrolled");
-    } else {
-      nav.classList.remove("scrolled");
+window.addEventListener("scroll", () => {
+  const trigger = window.innerHeight * 0.85;
+
+  reveals.forEach((el) => {
+    if (el.getBoundingClientRect().top < trigger) {
+      el.classList.add("in-view");
     }
   });
+});
 
-  // ─────────────────────────────────────
-  // MOBILE MENU
-  // ─────────────────────────────────────
-  const burger = document.getElementById("navBurger");
-  const menu = document.getElementById("mobMenu");
-
-  burger.addEventListener("click", () => {
-    burger.classList.toggle("open");
-    menu.classList.toggle("open");
-  });
-
-  // ─────────────────────────────────────
-  // REVEAL ON SCROLL
-  // ─────────────────────────────────────
-  const reveals = document.querySelectorAll(".reveal-up, .reveal-left, .reveal-right");
-
-  const observer = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        const delay = entry.target.dataset.delay || 0;
-        setTimeout(() => {
-          entry.target.classList.add("in-view");
-        }, delay * 1000);
-      }
-    });
-  }, { threshold: 0.2 });
-
-  reveals.forEach(el => observer.observe(el));
-
-  // ─────────────────────────────────────
-  // STATS COUNTER
-  // ─────────────────────────────────────
-  const counters = document.querySelectorAll(".stat-n");
-
-  const countUp = (el) => {
-    const target = +el.getAttribute("data-target");
-    let count = 0;
-
-    const update = () => {
-      count += target / 50;
-      if (count < target) {
-        el.textContent = Math.floor(count);
-        requestAnimationFrame(update);
-      } else {
-        el.textContent = target;
-      }
-    };
-
-    update();
-  };
-
-  const statsObserver = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        countUp(entry.target);
-      }
-    });
-  }, { threshold: 0.6 });
-
-  counters.forEach(c => statsObserver.observe(c));
-
-  // ─────────────────────────────────────
-  // PROJECT FILTER
-  // ─────────────────────────────────────
-  const filterBtns = document.querySelectorAll(".pf-btn");
-  const projects = document.querySelectorAll(".proj-card");
-
-  filterBtns.forEach(btn => {
-    btn.addEventListener("click", () => {
-      document.querySelector(".pf-btn.active").classList.remove("active");
-      btn.classList.add("active");
-
-      const filter = btn.dataset.filter;
-
-      projects.forEach(p => {
-        if (filter === "all" || p.dataset.cat === filter) {
-          p.classList.remove("hidden");
-        } else {
-          p.classList.add("hidden");
-        }
-      });
-    });
-  });
-
-  // ─────────────────────────────────────
-  // PARTICLES (HERO)
-  // ─────────────────────────────────────
-  const particleContainer = document.getElementById("heroParticles");
-
-  for (let i = 0; i < 40; i++) {
-    const p = document.createElement("div");
-    p.classList.add("particle");
-
-    p.style.left = Math.random() * 100 + "%";
-    p.style.top = Math.random() * 100 + "%";
-
-    p.style.setProperty("--dx", Math.random() * 100 + "px");
-    p.style.setProperty("--dy", Math.random() * 150 + "px");
-    p.style.setProperty("--dur", 3 + Math.random() * 3 + "s");
-    p.style.setProperty("--delay", Math.random() * 5 + "s");
-
-    particleContainer.appendChild(p);
-  }
-
-  // ─────────────────────────────────────
-  // MEASURING TAPE SCROLL
-  // ─────────────────────────────────────
-  const tape = document.getElementById("measureTape");
-
-  window.addEventListener("scroll", () => {
-    const scrollY = window.scrollY;
-    const height = document.body.scrollHeight - window.innerHeight;
-
-    const progress = scrollY / height;
-
-    if (progress > 0.1) {
-      tape.classList.add("visible");
-    }
-
-    const tapeHeight = progress * 400;
-    document.querySelector(".mt-body").style.height = tapeHeight + "px";
-  });
-
-  // ─────────────────────────────────────
-// CINEMATIC 3D HOUSE BUILD
+// ─────────────────────────────────────
+// 3D SCENE
 // ─────────────────────────────────────
 
 const canvas = document.getElementById("threeCanvas");
@@ -185,89 +53,146 @@ if (canvas && window.THREE) {
 
   const scene = new THREE.Scene();
 
-  const camera = new THREE.PerspectiveCamera(
-    60,
-    window.innerWidth / window.innerHeight,
-    0.1,
-    100
-  );
-
-  const renderer = new THREE.WebGLRenderer({
-    canvas: canvas,
-    alpha: true,
-    antialias: true
-  });
-
-  renderer.setSize(window.innerWidth, window.innerHeight);
-
+  // CAMERA
+  const camera = new THREE.PerspectiveCamera(60, window.innerWidth/window.innerHeight, 0.1, 100);
   camera.position.set(0, 2, 8);
 
-  // LIGHTING
-  const light = new THREE.DirectionalLight(0xffffff, 1);
-  light.position.set(5, 10, 7);
-  scene.add(light);
+  // RENDERER
+  const renderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: true });
+  renderer.setSize(window.innerWidth, window.innerHeight);
 
-  const ambient = new THREE.AmbientLight(0xffffff, 0.5);
+  // LIGHTING (SUNSET STYLE)
+  const sun = new THREE.DirectionalLight(0xffa07a, 1.2);
+  sun.position.set(5, 10, 5);
+  scene.add(sun);
+
+  const ambient = new THREE.AmbientLight(0xffffff, 0.4);
   scene.add(ambient);
-
-  // MATERIAL
-  const material = new THREE.MeshStandardMaterial({
-    color: 0xD6815E,
-    roughness: 0.6
-  });
 
   // GROUND
   const ground = new THREE.Mesh(
-    new THREE.PlaneGeometry(20, 20),
-    new THREE.MeshStandardMaterial({ color: 0xeeeeee })
+    new THREE.PlaneGeometry(30, 30),
+    new THREE.MeshStandardMaterial({ color: 0x222222 })
   );
   ground.rotation.x = -Math.PI / 2;
   scene.add(ground);
 
-  // FOUNDATION
+  // ─────────────────────────
+  // HOUSE
+  // ─────────────────────────
+
+  const wallMat = new THREE.MeshStandardMaterial({ color: 0xffffff });
+  const roofMat = new THREE.MeshStandardMaterial({ color: 0x333333 });
+  const accentMat = new THREE.MeshStandardMaterial({ color: 0xD6815E });
+
   const foundation = new THREE.Mesh(
-    new THREE.BoxGeometry(4, 0.3, 4),
-    material
+    new THREE.BoxGeometry(5, 0.3, 5),
+    accentMat
   );
   foundation.position.y = 0.15;
-  foundation.scale.set(0, 1, 0);
+  foundation.scale.set(0,1,0);
   scene.add(foundation);
 
-  // WALLS
-  const walls = new THREE.Mesh(
-    new THREE.BoxGeometry(4, 2, 4),
-    material
+  const house = new THREE.Mesh(
+    new THREE.BoxGeometry(4.5, 2.5, 4.5),
+    wallMat
   );
-  walls.position.y = 1.2;
-  walls.scale.set(0, 1, 0);
-  scene.add(walls);
+  house.position.y = 1.5;
+  house.scale.set(0,1,0);
+  scene.add(house);
 
-  // ROOF
   const roof = new THREE.Mesh(
-    new THREE.ConeGeometry(3, 1.5, 4),
-    material
+    new THREE.ConeGeometry(3.5, 1.8, 4),
+    roofMat
   );
-  roof.position.y = 3;
-  roof.rotation.y = Math.PI / 4;
-  roof.scale.set(0, 0, 0);
+  roof.position.y = 3.3;
+  roof.rotation.y = Math.PI/4;
+  roof.scale.set(0,0,0);
   scene.add(roof);
 
-  // ANIMATION TIMELINE
-  const tl = gsap.timeline({
-    paused: true
+  // DOOR
+  const door = new THREE.Mesh(
+    new THREE.BoxGeometry(0.8,1.5,0.1),
+    accentMat
+  );
+  door.position.set(0,0.9,2.3);
+  door.scale.set(0,1,1);
+  scene.add(door);
+
+  // WINDOWS
+  const windowMat = new THREE.MeshStandardMaterial({
+    color: 0x87CEEB,
+    emissive: 0x222222
   });
 
-  tl.to(foundation.scale, { x: 1, z: 1, duration: 1 })
-    .to(walls.scale, { x: 1, z: 1, duration: 1 })
-    .to(roof.scale, { x: 1, y: 1, z: 1, duration: 1 })
-    .to(camera.position, { z: 5, y: 3, duration: 1 }, 0);
+  const w1 = new THREE.Mesh(new THREE.BoxGeometry(0.8,0.8,0.1), windowMat);
+  w1.position.set(-1.2,1.8,2.3);
+  w1.scale.set(0,1,1);
+  scene.add(w1);
+
+  const w2 = w1.clone();
+  w2.position.set(1.2,1.8,2.3);
+  scene.add(w2);
+
+  // ─────────────────────────
+  // CRANE
+  // ─────────────────────────
+
+  const crane = new THREE.Group();
+
+  const base = new THREE.Mesh(
+    new THREE.BoxGeometry(0.3,3,0.3),
+    accentMat
+  );
+  base.position.y = 1.5;
+
+  const arm = new THREE.Mesh(
+    new THREE.BoxGeometry(4,0.2,0.2),
+    accentMat
+  );
+  arm.position.set(2,3,0);
+
+  crane.add(base);
+  crane.add(arm);
+  crane.position.set(-6,0,0);
+  scene.add(crane);
+
+  // ─────────────────────────
+  // WORKER
+  // ─────────────────────────
+
+  const worker = new THREE.Mesh(
+    new THREE.BoxGeometry(0.3,0.6,0.3),
+    new THREE.MeshStandardMaterial({ color: 0xffff00 })
+  );
+  worker.position.set(0,0.5,2.5);
+  scene.add(worker);
+
+  // ─────────────────────────
+  // ANIMATION TIMELINE
+  // ─────────────────────────
+
+  const tl = gsap.timeline({ paused: true });
+
+  tl.to(foundation.scale, { x:1, z:1, duration:1 })
+    .to(house.scale, { x:1, z:1, duration:1 })
+    .to(roof.scale, { x:1, y:1, z:1, duration:1 })
+    .to(door.scale, { x:1, duration:0.5 })
+    .to(w1.scale, { x:1, duration:0.5 })
+    .to(w2.scale, { x:1, duration:0.5 })
+
+    // CRANE MOVE
+    .to(crane.rotation, { y: Math.PI * 0.5, duration:2 }, 0)
+
+    // WORKER CLIMB
+    .to(worker.position, { y:2, duration:2 }, 1)
+
+    // CAMERA MOVE
+    .to(camera.position, { z:5, y:3, duration:2 }, 0);
 
   // SCROLL CONTROL
   window.addEventListener("scroll", () => {
-    const scrollY = window.scrollY;
-    const height = document.body.scrollHeight - window.innerHeight;
-    const progress = scrollY / height;
-
+    const progress = window.scrollY / (document.body.scrollHeight - window.innerHeight);
     tl.progress(progress);
   });
 
@@ -279,9 +204,9 @@ if (canvas && window.THREE) {
 
   animate();
 
-  // RESPONSIVE
+  // RESIZE
   window.addEventListener("resize", () => {
-    camera.aspect = window.innerWidth / window.innerHeight;
+    camera.aspect = window.innerWidth/window.innerHeight;
     camera.updateProjectionMatrix();
     renderer.setSize(window.innerWidth, window.innerHeight);
   });
