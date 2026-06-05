@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Bay Builders | Building Your Vision</title>
+
+  <link rel="stylesheet" href="style.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;700&display=swap" rel="stylesheet">
+</head>
+
+<body>
+
+  <div id="loader">
+    <div class="loader-content">
+      <h1>BAY BUILDERS</h1>
+      <div class="loader-bar">
+        <div id="loaderBarFill"></div>
+      </div>
+      <p id="loaderPct">0%</p>
+    </div>
+  </div>
+
+  <div id="cursor"></div>
+  <div id="cursor-follower"></div>
+
+  <nav id="nav">
+    <div class="nav-logo">BAY BUILDERS</div>
+    <div class="nav-links">
+      <a href="#">Home</a>
+      <a href="#">Services</a>
+      <a href="#">Projects</a>
+      <a href="#">Contact</a>
+    </div>
+    <div id="navBurger">
+      <span></span>
+      <span></span>
+      <span></span>
+    </div>
+  </nav>
+
+  <div id="mobMenu">
+    <a href="#">Home</a>
+    <a href="#">Services</a>
+    <a href="#">Projects</a>
+    <a href="#">Contact</a>
+  </div>
+
+  <canvas id="threeCanvas"></canvas>
+
+  <section class="hero">
+    <div id="heroParticles"></div>
+    <div class="hero-content">
+      <h1 class="reveal-up">Building Your Vision</h1>
+      <p class="reveal-up" data-delay="0.2">
+        Premium construction services in Gqeberha since 2004
+      </p>
+      <button class="cta-btn reveal-up" data-delay="0.4">
+        Get a Quote
+      </button>
+    </div>
+  </section>
+
+  <section class="about">
+    <h2 class="reveal-left">About Bay Builders</h2>
+    <p class="reveal-right">
+      We are committed to top quality and high-level services,
+      delivering excellence in every project.
+    </p>
+  </section>
+
+  <section class="services">
+    <h2 class="reveal-up">What We Offer</h2>
+    <div class="service-grid">
+      <div class="service-card reveal-up">Turn Key Projects</div>
+      <div class="service-card reveal-up">Renovations</div>
+      <div class="service-card reveal-up">New Builds</div>
+      <div class="service-card reveal-up">Alterations</div>
+      <div class="service-card reveal-up">Interior & Exterior</div>
+    </div>
+  </section>
+
+  <section class="stats">
+    <div class="stat">
+      <h3 class="stat-n" data-target="22">0</h3>
+      <p>Years Experience</p>
+    </div>
+    <div class="stat">
+      <h3 class="stat-n" data-target="150">0</h3>
+      <p>Projects Completed</p>
+    </div>
+    <div class="stat">
+      <h3 class="stat-n" data-target="100">0</h3>
+      <p>Happy Clients</p>
+    </div>
+  </section>
+
+  <section class="projects">
+    <h2>Our Work</h2>
+    <div class="project-filter">
+      <button class="pf-btn active" data-filter="all">All</button>
+      <button class="pf-btn" data-filter="build">Builds</button>
+      <button class="pf-btn" data-filter="reno">Renovations</button>
+    </div>
+    <div class="project-grid">
+      <div class="proj-card" data-cat="build">Project 1</div>
+      <div class="proj-card" data-cat="reno">Project 2</div>
+      <div class="proj-card" data-cat="build">Project 3</div>
+    </div>
+  </section>
+
+  <div id="measureTape">
+    <div class="mt-body"></div>
+  </div>
+
+  <section class="contact">
+    <h2>Contact Us</h2>
+    <p>📞 083 379 9899</p>
+    <p>📧 baybuilderspe1@gmail.com</p>
+    <p>📍 Gqeberha, Eastern Cape</p>
+    <a href="https://www.instagram.com/baybuilders_ec/" target="_blank">
+      Instagram
+    </a>
+  </section>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+  <script src="main.js"></script>
+
+</body>
+</html>
